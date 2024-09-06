@@ -1,0 +1,206 @@
+﻿body {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    font-family: Arial, sans-serif;
+}
+
+.inline-image {
+    height: 1em;
+    width: auto;
+    vertical-align: middle;
+    border: none;
+    background: none;
+    position: relative;
+    top: -0.4em;
+}
+
+.question-mark-button {
+    border: none;
+    background: none;
+}
+
+.title {
+    text-align: center;
+    margin: 20px 0;
+}
+
+    .title h1 {
+        font-size: 2.5rem; /* Increases the font size */
+        font-weight: bold; /* Makes the text bold */
+        color: #fefefe; /* Light color for dark mode or a professional look */
+        letter-spacing: 2px; /* Adds spacing between letters */
+        border-bottom: 3px solid #444; /* Adds a bottom border for a more defined look */
+        padding-bottom: 10px; /* Adds space below the text and border */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Adds a subtle shadow for depth */
+    }
+
+.rate.title h3 {
+    font-size: 2.5em;
+    font-weight: bold;
+    margin-top: 7px;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.add-row-container {
+    color: #e0e0e0;
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.add-row {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.file-upload-container {
+    margin-top: 20px;
+    color: orangered;
+}
+
+.rate {
+    display: flex;
+    position: relative;
+    align-items: center;
+}
+
+.input-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.formula-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #2e2e2e;
+    color: #dcdcdc;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    width: 80vw; /* Adjust as needed */
+    max-width: 700px; /* Optional: set a maximum width */
+    z-index: 1100; /* Ensure it’s above the overlay */
+    text-align: center; /* Center text inside the popup */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Align close button to the right */
+}
+
+.tooltiptext {
+    visibility: hidden;
+    position: absolute;
+    background-color: floralwhite;
+    color: black;
+    padding: 5px;
+    border-radius: 8px;
+    margin-left: 20px;
+    z-index: 2002;
+    pointer-events: none;
+    top: 100%;
+    left: 1%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    transition: opacity 0.3s;
+}
+
+    .tooltiptext.visible {
+        visibility: visible;
+    }
+
+.blur-background {
+    filter: blur(10px);
+    pointer-events: none;
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.popup-content {
+    width: 100%;
+    text-align: center; /* Center the content text */
+    color: #dcdcdc;
+}
+
+.formula-text {
+    margin: 0;
+}
+
+.file-upload {
+    display: none;
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.error-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #2e2e2e;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    width: 80vw; /* Adjust as needed */
+    max-width: 700px; /* Optional: set a maximum width */
+    z-index: 1100; /* Ensure it’s above the overlay */
+    text-align: center; /* Center text inside the popup */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Align close button to the right */
+}
+
+.download-button-styling {
+    background-color: #444; /* Dark grey background for dark mode */
+    color: #dcdcdc; /* Light grey text color for better readability */
+    border: 1px solid #666; /* Slightly lighter border color */
+    padding: 10px 20px; /* Adjust padding as needed */
+    border-radius: 5px; /* Rounded corners for the button */
+    font-size: 16px; /* Adjust font size as needed */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s, border-color 0.3s; /* Smooth transition for background and border color */
+    margin-bottom: 15px; /* Space towards the bottom */
+}
+
+    .download-button-styling:hover {
+        background-color: #555; /* Slightly lighter grey when hovering */
+        border-color: #888; /* Lighter border color on hover */
+    }
+
+.drag-drop-area {
+    border: 2px dashed #cccccc;
+    padding: 20px;
+    text-align: center;
+    background-color: #f9f9f9;
+}
+
+    .drag-drop-area.drag-over {
+        border-color: #0000ff;
+        background-color: #e0e0ff;
+    }

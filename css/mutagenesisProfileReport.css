@@ -1,0 +1,32 @@
+﻿.input-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #1e1e1e;
+    padding: 15px;
+    margin: 10px 0;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.box-styling {
+    flex: 1 1 150px;
+    min-width: 0;
+    border: 1px solid #333;
+    background-color: #2b2b2b;
+    color: #e0e0e0;
+    border-radius: 4px;
+}
+
+.input-container input {
+    background-color: #2a2a2a;
+    color: #fff;
+    border: 1px solid #444;
+    border-radius: 5px;
+    padding: 8px;
+}
