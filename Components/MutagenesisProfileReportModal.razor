@@ -1,0 +1,56 @@
+﻿@namespace mutaFinal.Components
+
+@code {
+    [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public EventCallback<bool> IsVisibleChanged { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+
+    private void Close() => IsVisibleChanged.InvokeAsync(false);
+}
+
+<div class="modal" style="@(IsVisible ? "display:block;" : "display:none;")">
+    <div class="modal-content">
+        <span class="close" @onclick="Close">&times;</span>
+        @ChildContent
+    </div>
+</div>
+
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4);
+        padding-top: 60px;
+    }
+
+    .modal-content {
+        background-color: #2e2e2e;
+        margin: 5% auto;
+        padding: 20px;
+        border: 1px solid #444;
+        width: 80%;
+        color: #dcdcdc;
+    }
+
+    .close {
+        color: #dcdcdc;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #b0b0b0;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>

@@ -1,0 +1,217 @@
+﻿@page "/DataEntry"
+@using System.IO
+@using System.Text
+@using System.Threading.Tasks;
+@using Microsoft.JSInterop
+@using mutaFinal.Components
+@using mutaFinal.Pages.CodeBehind
+@using mutaFinal.Pages
+@inject IJSRuntime JS
+<PageTitle>Mutagenesis Profile Report</PageTitle>
+<link href="css/mutagenesisProfileReport.css" rel="stylesheet" />
+<link href="css/closebuttonstyling.css" rel="stylesheet" />
+<link href="css/generalbuttonstyling.css" rel="stylesheet" />
+<link href="css/fileuploadbutton.css" rel="stylesheet" />
+<link href="css/inputcontainer.css" rel="stylesheet" />
+
+
+<div class="title">
+    <h1>Mutagenesis Profile Report</h1>
+</div>
+
+@foreach (var inputRow in GlobalState.InputRows)
+{
+    <div class="input-container">
+        <div>
+            <InputFile OnChange="@(e => FileUploadService.HandleFileUpload(e, inputRow.Id, inputRow))" Multiple />
+        </div>
+        <InputText class="box-styling" @bind-Value="inputRow.Genotype" placeholder="Genotype" />
+        <InputText class="box-styling" @bind-Value="inputRow.PlasmidID" placeholder="Plasmid ID" />
+        <InputText class="box-styling" @bind-Value="inputRow.TargetSite" placeholder="Target Site" />
+        <InputText class="box-styling" @bind-Value="inputRow.FourthNucleotide" placeholder="Fourth Nucleotide" />
+        <InputText class="box-styling" @bind-Value="inputRow.Rep" placeholder="Rep" />
+        <button class="button-styling" @onclick="() => SaveInputsService.SaveInputs(inputRow)">Save</button>
+        <button class="button-styling" @onclick="() => ShowModal(inputRow.Id)">Analyze</button>
+    </div>
+}
+<div class="add-row-container">
+    <button class="button-styling" @onclick="() => AddNewRowService.AddNewRow()">Add New Row</button>
+</div>
+
+<MutagenesisProfileReportModal IsVisible="GlobalState.IsModalVisible" IsVisibleChanged="OnModalVisibilityChangedService.OnModalVisibilityChanged">
+    @if (GlobalState.isFormulaVisible)
+    {
+        <div class="popup-overlay" @onclick="HideFormula"></div>
+    }
+    @if (GlobalState.SelectedRow != null)
+    {
+        <div>
+            <h3>
+                <strong>Plasmid Id: </strong>@GlobalState.SelectedRow.PlasmidID
+                <strong>Genotype: </strong>@GlobalState.SelectedRow.Genotype
+                <strong>Target Size: </strong>@GlobalState.SelectedRow.TargetSite
+                <strong>Replicate: </strong>@GlobalState.SelectedRow.Rep
+                <strong>Fourth Nucleotide: </strong>@GlobalState.SelectedRow.FourthNucleotide
+            </h3>
+            <p><strong>File Name:</strong> @GlobalState.SelectedFileName</p>
+            <button class="download-button-styling" @onclick="() => DownloadHtmlReport(GlobalState.SelectedRow)">Download HTML Report</button>
+            <button class="download-button-styling" @onclick="DownloadExcelReport">Download Excel Report</button>
+            @foreach (var rate in GlobalState.MutationRates)
+            {
+                @if (rate.Formula != "")
+                {
+                    <div class="rate">
+                        <button class="question-mark-button"
+                        @onclick="() => ShowFormulaService.ShowFormula(rate)"
+                        @onclick:preventDefault
+                        @onmouseover="() => ShowTooltip(rate)"
+                        @onmouseleave="() => HideTooltip(rate)">
+                            <img src="images/questionmark.png" class="inline-image" />
+                            <span class="tooltiptext" style="visibility: @(rate.ShowTooltip ? "visible" : "hidden")">
+                                How is this calculated?
+                            </span>
+                        </button>
+                        <h3>@rate.Name: @rate.Value</h3>
+                    </div>
+                }
+                else
+                {
+                    <div class="rate title">
+                        <h3>@rate.Name</h3>
+                    </div>
+                }
+            }
+        </div>
+    }
+</MutagenesisProfileReportModal>
+
+@if (GlobalState.isFormulaVisible)
+{
+    <div class="popup-overlay" @onclick="HideFormula"></div>
+    <div class="formula-popup">
+        <button class="close-button" @onclick="HideFormula">&times;</button>
+        <div class="popup-content">
+            <p class="formula-text">@GlobalState.Formula</p>
+        </div>
+    </div>
+}
+@if (GlobalState.InputErrors.Count > 0)
+{
+    <div class="popup-overlay">
+        <div class="error-popup">
+            <button class="close-button" @onclick="HideError">&times;</button>
+            @foreach (var error in GlobalState.InputErrors)
+            {
+                <div class="popup-content">
+                    <p class="formula-text">@error</p>
+                </div>
+            }
+        </div>
+    </div>
+}
+@code {
+    protected override void OnInitialized()
+    {
+        GlobalState.StateChanged += StateHasChanged;
+        base.OnInitialized();
+        AddNewRowService.AddNewRow();
+    }
+
+    public void Dispose()
+    {
+        GlobalState.StateChanged -= StateHasChanged;
+    }
+
+    private async Task ShowModal(int rowId)
+    {
+        var inputRow = GlobalState.InputRows.FirstOrDefault(r => r.Id == rowId);
+        if (inputRow != null)
+        {
+            ClearDataService.ClearData();
+            GlobalState.SelectedRow = inputRow;
+            GlobalState.IsModalVisible = true;
+            await SelectFileService.SelectFile(inputRow.Id);
+            GlobalState.UpdateMutationRates();
+            GlobalState.NotifyStateChanged();
+        }
+    }
+    private void HideError()
+    {
+        GlobalState.InputErrors.Clear();
+        GlobalState.NotifyStateChanged();
+    }
+    private void HideFormula()
+    {
+        GlobalState.isFormulaVisible = false;
+        GlobalState.NotifyStateChanged();
+    }
+
+    public static void ShowTooltip(MutationRate rate)
+    {
+        rate.SetShowTooltip(true);
+    }
+
+    public static void HideTooltip(MutationRate rate)
+    {
+        rate.SetShowTooltip(false);
+    }
+
+    public async Task DownloadHtmlReport(InputRow inputRow)
+    {
+        GlobalState.SelectedRow = inputRow;
+        string htmlContent = GenerateHTMLContentService.GenerateHTMLContent();
+        string fileName = "MutagenesisReport.html";
+
+        await DownloadFile(htmlContent, fileName);
+    }
+
+    private async Task DownloadFile(string content, string fileName)
+    {
+        var bytes = Encoding.UTF8.GetBytes(content);
+        var base64 = Convert.ToBase64String(bytes);
+        var url = $"data:text/html;base64,{base64}";
+
+        await JS.InvokeVoidAsync("downloadFile", url, fileName);
+    }
+
+    public async Task DownloadExcelReport()
+    {
+        var globalData = new
+        {
+            name1 = GlobalState.OverallMutagenesisRate,
+            name2 = GlobalState.OneBpInsertionRate, 
+            name3 = GlobalState.AInsertionRate, 
+            name4 = GlobalState.TInsertionRate,
+            name5 = GlobalState.CInsertionRate,
+            name6 = GlobalState.GInsertionRate,
+            name7 = GlobalState.TemplatedOneBpInsertionRate,
+            name8 = GlobalState.NonTemplatedOneBpInsertionRate,
+            name9 = GlobalState.SmallDeletionRate,
+            name10 = GlobalState.OneBpDeletionRate,
+            name11 = GlobalState.TwoBpDeletionRate,
+            name12 = GlobalState.ThreeBpDeletionRate,
+            name13 = GlobalState.FourBpDeletionRate,
+            name14 = GlobalState.FiveBpDeletionRate,
+            name15 = GlobalState.SixBpDeletionRate,
+            name16 = GlobalState.SevenBpDeletionRate,
+            name17 = GlobalState.EightBpDeletionRate,
+            name18 = GlobalState.NineBpDeletionRate,
+            name19 = GlobalState.TenBpDeletionRate,
+            name20 = GlobalState.OneDeletionRate,
+            name21 = GlobalState.TwoDeletionRate,
+            name22 = GlobalState.ThreeDeletionRate,
+            name23 = GlobalState.FourDeletionRate,
+            name24 = GlobalState.FiveDeletionRate,
+            name25 = GlobalState.SixDeletionRate,
+            name26 = GlobalState.SevenDeletionRate,
+            name27 = GlobalState.EightDeletionRate,
+            name28 = GlobalState.NineDeletionRate,
+            name29 = GlobalState.TenDeletionRate,
+            name30 = GlobalState.OneInsertionRate,
+            name31 = GlobalState.TwoInsertionRate,
+            name32 = GlobalState.ThreeInsertionRate
+        };
+        await JS.InvokeVoidAsync("createExcelFile", globalData);
+    }
+
+}
