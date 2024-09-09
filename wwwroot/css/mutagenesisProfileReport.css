@@ -30,3 +30,29 @@
     border-radius: 5px;
     padding: 8px;
 }
+
+/* Dark Mode Message Container */
+.message-container-dark {
+    background-color: #333333; /* Dark grey to match the overall theme */
+    border-left: 4px solid #1e88e5; /* Blue accent to draw attention */
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #f0f0f0; /* Light grey text for contrast */
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+/* Icon Styling for Dark Mode */
+.message-icon-dark {
+    font-size: 24px;
+    margin-right: 10px;
+    color: #1e88e5; /* Blue to match the border and stand out against dark grey */
+}
+
+/* Strong Text for Emphasis */
+.message-container-dark strong {
+    color: #ffffff; /* White text for strong emphasis */
+}
+

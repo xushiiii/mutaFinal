@@ -6,7 +6,7 @@ namespace mutaFinal.Pages.CodeBehind
     {
         public static void NonTemplatedOneBpInsertionRate(string content)
         {
-            GlobalState.NonTemplatedOneBpInsertionRate = 1 - GlobalState.TemplatedOneBpInsertionRate;
+            GlobalState.NonTemplatedOneBpInsertionRate = 100 - GlobalState.TemplatedOneBpInsertionRate;
         }
     }
 }
