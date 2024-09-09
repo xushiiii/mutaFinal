@@ -1,0 +1,58 @@
+﻿.input-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #1e1e1e;
+    padding: 15px;
+    margin: 10px 0;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.box-styling {
+    flex: 1 1 150px;
+    min-width: 0;
+    border: 1px solid #333;
+    background-color: #2b2b2b;
+    color: #e0e0e0;
+    border-radius: 4px;
+}
+
+.input-container input {
+    background-color: #2a2a2a;
+    color: #fff;
+    border: 1px solid #444;
+    border-radius: 5px;
+    padding: 8px;
+}
+
+/* Dark Mode Message Container */
+.message-container-dark {
+    background-color: #333333; /* Dark grey to match the overall theme */
+    border-left: 4px solid #1e88e5; /* Blue accent to draw attention */
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #f0f0f0; /* Light grey text for contrast */
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+/* Icon Styling for Dark Mode */
+.message-icon-dark {
+    font-size: 24px;
+    margin-right: 10px;
+    color: #1e88e5; /* Blue to match the border and stand out against dark grey */
+}
+
+/* Strong Text for Emphasis */
+.message-container-dark strong {
+    color: #ffffff; /* White text for strong emphasis */
+}
+
